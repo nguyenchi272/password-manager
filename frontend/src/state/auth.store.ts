@@ -65,7 +65,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   loadUser: async () => {
     try {
-      const res = await client.get("/accounts/me");
+      const res = await client.get("/profile");
       set({ user: res.data });
     } catch {
       set({ user: null });

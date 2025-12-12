@@ -9,7 +9,11 @@ export default function Header() {
       <h1 className="text-lg font-semibold">Password Manager</h1>
 
       <div className="flex items-center gap-4">
-        <span className="text-gray-600 dark:text-gray-300">{user?.email}</span>
+        {user && (
+          <div className="text-sm font-medium">
+            {user.name}
+          </div>
+          )}
 
         <button
           onClick={logout}

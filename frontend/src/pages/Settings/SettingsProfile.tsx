@@ -21,6 +21,10 @@ export default function SettingProfile() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
+  const [loadingSave, setLoadingSave] = useState(false);
+  const [loadingPw, setLoadingPw] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
   const [isPwOpen, setIsPwOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
@@ -28,11 +32,24 @@ export default function SettingProfile() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Reset pw fields when closing modal
+  const resetPasswordFields = () => {
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  };
+
   // Load profile info
   const loadProfile = async () => {
-    const res = await getProfileAPI();
-    setName(res.data.name || "");
-    setEmail(res.data.email || "");
+    try {
+      const res = await getProfileAPI();
+      const user = res?.data;
+
+      setName(user?.name || "");
+      setEmail(user?.email || "");
+    } catch (err) {
+      console.error("Failed to load profile");
+    }
   };
 
   useEffect(() => {
@@ -42,43 +59,57 @@ export default function SettingProfile() {
   // Save updated profile
   const saveProfile = async () => {
     try {
+      setLoadingSave(true);
       await updateProfileAPI(name, email);
       alert("Profile updated successfully");
     } catch (err: any) {
       alert(err.response?.data?.message || "Failed to update profile");
+    } finally {
+      setLoadingSave(false);
     }
   };
 
   // Change Password
   const submitChangePassword = async () => {
+    if (!currentPassword || !newPassword) {
+      alert("Please fill all fields");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
     try {
+      setLoadingPw(true);
       await changePasswordAPI(currentPassword, newPassword);
-      alert("Password changed successfully");
-      setIsPwOpen(false);
 
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      alert("Password changed successfully");
+
+      resetPasswordFields();
+      setIsPwOpen(false);
     } catch (err: any) {
       alert(err.response?.data?.message || "Failed to change password");
+    } finally {
+      setLoadingPw(false);
     }
   };
 
   // Delete account
   const submitDelete = async () => {
     try {
+      setLoadingDelete(true);
       await deleteProfileAPI();
+
       alert("Account deleted");
 
       localStorage.clear();
       window.location.href = "/login";
     } catch (err: any) {
       alert(err.response?.data?.message || "Failed to delete account");
+    } finally {
+      setLoadingDelete(false);
     }
   };
 
@@ -88,7 +119,10 @@ export default function SettingProfile() {
       {/* Title */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Account Settings</h1>
-        <Button onClick={saveProfile}>Save Changes</Button>
+
+        <Button onClick={saveProfile} disabled={loadingSave}>
+          {loadingSave ? "Saving..." : "Save Changes"}
+        </Button>
       </div>
 
       {/* Profile Form */}
@@ -122,11 +156,13 @@ export default function SettingProfile() {
             Delete Account
           </Button>
         </div>
-
       </div>
 
       {/* Dialog Change Password */}
-      <Dialog open={isPwOpen} onOpenChange={setIsPwOpen}>
+      <Dialog open={isPwOpen} onOpenChange={(open) => {
+        setIsPwOpen(open);
+        if (!open) resetPasswordFields();
+      }}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Change Password</DialogTitle>
@@ -170,7 +206,10 @@ export default function SettingProfile() {
             <Button variant="outline" onClick={() => setIsPwOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={submitChangePassword}>Update</Button>
+
+            <Button onClick={submitChangePassword} disabled={loadingPw}>
+              {loadingPw ? "Updating..." : "Update"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -188,12 +227,18 @@ export default function SettingProfile() {
             <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={submitDelete}>
-              Delete
+
+            <Button
+              variant="destructive"
+              onClick={submitDelete}
+              disabled={loadingDelete}
+            >
+              {loadingDelete ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
     </div>
   );
 }

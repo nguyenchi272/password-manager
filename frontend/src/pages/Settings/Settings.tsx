@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SettingsSidebar from "./SettingsSidebar";
 import SettingsGeneral from "./SettingsGeneral";
-import SettingsAccount from "./SettingsAccount";
+import SettingProfile from "./SettingsProfile";
 import SettingsTheme from "./SettingsTheme";
 import SettingsExport from "./SettingsExport";
 import SettingsImport from "./SettingsImport";
@@ -15,7 +15,7 @@ export default function Settings() {
 
       <div className="flex-1 p-8 overflow-auto">
         {tab === "general" && <SettingsGeneral />}
-        {tab === "account" && <SettingsAccount />}
+        {tab === "account" && <SettingProfile />}
         {tab === "theme" && <SettingsTheme />}
         {tab === "export" && <SettingsExport />}
         {tab === "import" && <SettingsImport />}
