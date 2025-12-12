@@ -1,19 +1,17 @@
-import { Router } from "express";
-import { authMiddleware } from "../middlewares/auth.js";
+import express from "express";
+import { authMiddleware } from "../middlewares/auth";
 import {
   getProfile,
   updateProfile,
-  updateEmail,
-  updatePassword,
-  deleteAccount
-} from "../controllers/profile.controller.js";
+  changePassword,
+  deleteProfile
+} from "../controllers/profile.controller";
 
-const router = Router();
+const router = express.Router();
 
 router.get("/", authMiddleware, getProfile);
-router.put("/name", authMiddleware, updateProfile);
-router.put("/email", authMiddleware, updateEmail);
-router.put("/password", authMiddleware, updatePassword);
-router.delete("/", authMiddleware, deleteAccount);
+router.put("/", authMiddleware, updateProfile);
+router.put("/change-password", authMiddleware, changePassword);
+router.delete("/", authMiddleware, deleteProfile);
 
 export default router;

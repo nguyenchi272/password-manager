@@ -1,67 +1,43 @@
 import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import prisma from "../utils/prisma.js";
+import prisma from "../utils/prisma";
+import bcrypt from "bcrypt";
 
+// Lấy thông tin user
 export const getProfile = async (req: Request, res: Response) => {
   const userId = req.userId;
-  if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { id: true, email: true, name: true }
   });
 
-  res.json(user);
+  return res.json(user);
 };
 
-
+// Cập nhật profile
 export const updateProfile = async (req: Request, res: Response) => {
   const userId = req.userId;
-  const { name } = req.body;
-
-  if (!userId) return res.status(401).json({ message: "Unauthorized" });
+  const { name, email } = req.body;
 
   const updated = await prisma.user.update({
     where: { id: userId },
-    data: { name },
-    select: { id: true, email: true, name: true }
+    data: { name, email }
   });
 
-  res.json(updated);
+  return res.json({ message: "Profile updated", user: updated });
 };
 
-
-export const updateEmail = async (req: Request, res: Response) => {
-  const userId = req.userId;
-  const { email } = req.body;
-
-  if (!userId) return res.status(401).json({ message: "Unauthorized" });
-
-  const updated = await prisma.user.update({
-    where: { id: userId },
-    data: { email },
-    select: { id: true, email: true, name: true }
-  });
-
-  res.json(updated);
-};
-
-export const updatePassword = async (req: Request, res: Response) => {
+// Đổi mật khẩu
+export const changePassword = async (req: Request, res: Response) => {
   const userId = req.userId;
   const { currentPassword, newPassword } = req.body;
 
-  if (!userId) return res.status(401).json({ message: "Unauthorized" });
-
-  const user = await prisma.user.findUnique({
-    where: { id: userId }
-  });
+  const user = await prisma.user.findUnique({ where: { id: userId } });
 
   if (!user) return res.status(404).json({ message: "User not found" });
 
   const match = await bcrypt.compare(currentPassword, user.password);
-  if (!match) {
-    return res.status(400).json({ message: "Invalid current password" });
-  }
+  if (!match) return res.status(400).json({ message: "Invalid current password" });
 
   const hashed = await bcrypt.hash(newPassword, 10);
 
@@ -70,17 +46,14 @@ export const updatePassword = async (req: Request, res: Response) => {
     data: { password: hashed }
   });
 
-  res.json({ message: "Password updated" });
+  return res.json({ message: "Password changed successfully" });
 };
 
-
-export const deleteAccount = async (req: Request, res: Response) => {
+// Xóa tài khoản
+export const deleteProfile = async (req: Request, res: Response) => {
   const userId = req.userId;
-
-  if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
   await prisma.user.delete({ where: { id: userId } });
 
-  res.json({ message: "Account deleted" });
+  return res.json({ message: "Account deleted" });
 };
-

@@ -1,24 +1,27 @@
-import client from "./client";
+import axios from "axios";
 
+// Lấy profile
 export const getProfileAPI = () => {
-  return client.get("/account/profile");
+  return axios.get("/profile");
 };
 
-export const updateNameAPI = (name: string) => {
-  return client.put("/account/profile/name", { name });
+// Cập nhật display name + email
+export const updateProfileAPI = (name: string, email: string) => {
+  return axios.put("/profile", { name, email });
 };
 
-export const updateEmailAPI = (email: string) => {
-  return client.put("/account/profile/email", { email });
+// Đổi mật khẩu
+export const changePasswordAPI = (
+  currentPassword: string,
+  newPassword: string
+) => {
+  return axios.put("/profile/change-password", {
+    currentPassword,
+    newPassword,
+  });
 };
 
-export const updatePasswordAPI = (data: {
-  currentPassword: string;
-  newPassword: string;
-}) => {
-  return client.put("/account/profile/password", data);
-};
-
-export const deleteAccountAPI = () => {
-  return client.delete("/account/delete");
+// Xóa tài khoản
+export const deleteProfileAPI = () => {
+  return axios.delete("/profile");
 };
