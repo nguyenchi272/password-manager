@@ -118,7 +118,7 @@ export default function SettingProfile() {
 
       {/* Title */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Account Settings</h1>
+        <h1 className="text-2xl font-semibold dark:text-gray-200">Account Settings</h1>
 
         <Button onClick={saveProfile} disabled={loadingSave}>
           {loadingSave ? "Saving..." : "Save Changes"}

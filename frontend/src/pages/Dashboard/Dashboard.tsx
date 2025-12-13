@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import ItemCard from "../../components/ItemCard";
 import api from "../../api/client";
+import { Input } from "../../components/ui/Input";
 
 export default function Dashboard() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   const load = async () => {
     try {
@@ -42,16 +44,39 @@ export default function Dashboard() {
 
   if (loading) return <p>Loading...</p>;
 
+  //Filter items by search
+  const filteredItems = items.filter((item) => {
+    const keyword = search.trim().toLowerCase();
+
+    if (!keyword) return true;
+
+    const title = (item.name || "").toLowerCase();
+    const username = (item.username || "").toLowerCase();
+
+    return title.includes(keyword) || username.includes(keyword);
+  });
+
+
   return (
-    <div className="text-gray-900 dark:text-gray-100">
+    <div className="text-gray-900">
       <h1 className="text-2xl font-bold mb-4">Your saved accounts</h1>
 
+      {/* 🔍 Search bar */}
+      <Input
+        placeholder="Search by title or username..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="mb-6 max-w-md"
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {items.length === 0 && (
-          <p className="text-gray-500 dark:text-gray-400 col-span-3">No accounts yet.</p>
+        {filteredItems.length === 0 && (
+          <p className="text-gray-500 dark:text-gray-400 col-span-3">
+            No matching accounts.
+          </p>
         )}
 
-        {items.map((i) => (
+        {filteredItems.map((i) => (
           <ItemCard key={i.id} item={i} />
         ))}
       </div>
