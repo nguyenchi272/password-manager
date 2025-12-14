@@ -5,20 +5,22 @@ import {
   Upload, 
   Download 
 } from "lucide-react";
+import { useI18n } from "../../i18n/useI18n";
 
 export default function SettingsSidebar({ active, onChange }: any) {
+  const { t } = useI18n();
   const items = [
-    { id: "general", label: "General", icon: Settings },
-    { id: "account", label: "Account", icon: UserCog },
-    { id: "theme", label: "Theme", icon: Palette },
-    { id: "export", label: "Export", icon: Download },
-    { id: "import", label: "Import", icon: Upload },
+    { id: "general", label: t("settings.general2"), icon: Settings },
+    { id: "account", label: t("settings.account"), icon: UserCog },
+    { id: "theme", label: t("settings.theme"), icon: Palette },
+    { id: "export", label: t("settings.export"), icon: Download },
+    { id: "import", label: t("settings.import"), icon: Upload },
   ];
 
   return (
     <aside className="w-64 bg-white dark:bg-gray-800 shadow-xl border-r border-gray-200 dark:border-gray-700">
       <h2 className="text-xl font-bold px-6 pt-6 pb-4 text-gray-800 dark:text-gray-200">
-        Settings
+        {t("settings.settings")}
       </h2>
 
       <ul className="mt-4">

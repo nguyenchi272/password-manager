@@ -3,11 +3,13 @@ import { useAuthStore } from "../../state/auth.store";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../../components/ui/Input";
 import { Button } from "../../components/ui/Button";
+import { useI18n } from "../../i18n/useI18n";
 
 export default function Login() {
   const navigate = useNavigate();
   const login = useAuthStore((s) => s.login);
   const error = useAuthStore((s) => s.error);
+  const { t } = useI18n();
   const loading = useAuthStore((s) => s.loading);
 
   const [email, setEmail] = useState("");
@@ -25,13 +27,13 @@ export default function Login() {
         onSubmit={handleSubmit}
         className="bg-white p-8 shadow-lg rounded-xl w-[400px]"
       >
-        <h1 className="text-2xl mb-6 text-center font-bold">Login</h1>
+        <h1 className="text-2xl mb-6 text-center font-bold">{t("auth.login")}</h1>
 
         {error && (
           <p className="text-red-600 text-sm mb-3 text-center">{error}</p>
         )}
 
-        <label className="block mb-2">Email</label>
+        <label className="block mb-2">{t("auth.email")}</label>
         <input
           className="w-full p-2 border rounded mb-4"
           type="email"
@@ -39,7 +41,7 @@ export default function Login() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label className="block mb-2">Password</label>
+        <label className="block mb-2">{t("auth.password")}</label>
         <input
           className="w-full p-2 border rounded mb-4"
           type="password"
@@ -55,9 +57,9 @@ export default function Login() {
         </button>
 
         <p className="mt-4 text-center">
-          Don’t have an account?{" "}
+          {t("auth.message")}{" "}
           <a href="/register" className="text-blue-600">
-            Register
+            {t("auth.register")}
           </a>
         </p>
       </form>

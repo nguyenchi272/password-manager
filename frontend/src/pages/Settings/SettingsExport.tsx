@@ -1,6 +1,8 @@
 import api from "../../api/client";
+import { useI18n } from "../../i18n/useI18n";
 
 export default function SettingsExport() {
+  const { t } = useI18n();
   const exportCsv = async () => {
     const res = await api.get("/accounts");
     const accounts = res.data;
@@ -22,14 +24,14 @@ export default function SettingsExport() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">
-        Export Accounts
+        {t("settings.export")}
       </h1>
 
       <button
         onClick={exportCsv}
         className="bg-blue-600 text-white px-4 py-2 rounded shadow"
       >
-        Export CSV
+        {t("settings.exportCSV")}
       </button>
     </div>
   );

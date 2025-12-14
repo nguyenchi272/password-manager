@@ -16,10 +16,12 @@ import {
   DialogTitle,
   DialogFooter,
 } from "../../components/ui/dialog";
+import { useI18n } from "../../i18n/useI18n";
 
 export default function SettingProfile() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const { t } = useI18n();
 
   const [loadingSave, setLoadingSave] = useState(false);
   const [loadingPw, setLoadingPw] = useState(false);
@@ -118,10 +120,10 @@ export default function SettingProfile() {
 
       {/* Title */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold dark:text-gray-200">Account Settings</h1>
+        <h1 className="text-2xl font-semibold dark:text-gray-200">{t("settings.accountSettings")}</h1>
 
         <Button onClick={saveProfile} disabled={loadingSave}>
-          {loadingSave ? "Saving..." : "Save Changes"}
+          {loadingSave ? t("settings.save") : t("settings.save")}
         </Button>
       </div>
 
@@ -129,7 +131,7 @@ export default function SettingProfile() {
       <div className="space-y-6 p-6 border border-border rounded-lg bg-card shadow-sm">
 
         <div className="space-y-2">
-          <Label>Display Name</Label>
+          <Label>{t("settings.displayName")}</Label>
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -138,7 +140,7 @@ export default function SettingProfile() {
         </div>
 
         <div className="space-y-2">
-          <Label>Email Address</Label>
+          <Label>{t("settings.emailAddress")}</Label>
           <Input
             value={email}
             type="email"
@@ -149,11 +151,11 @@ export default function SettingProfile() {
 
         <div className="pt-4 flex items-center gap-4">
           <Button variant="outline" onClick={() => setIsPwOpen(true)}>
-            Change Password
+            {t("settings.changePassword")}
           </Button>
 
           <Button variant="destructive" onClick={() => setIsDeleteOpen(true)}>
-            Delete Account
+            {t("settings.deleteAccount")}
           </Button>
         </div>
       </div>

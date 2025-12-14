@@ -1,9 +1,11 @@
 import { useState } from "react";
 import api from "../../api/client";
+import { useI18n } from "../../i18n/useI18n";
 
 export default function SettingsImport() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const { t } = useI18n();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -43,14 +45,14 @@ export default function SettingsImport() {
         await api.post("/accounts", acc);
       }
 
-      alert("Import completed successfully!");
+      alert(t("settings.importAlert"));
       setFile(null);
 
       // 🔥 Gửi event để Dashboard tự reload
       window.dispatchEvent(new Event("account-imported"));
     } catch (err) {
       console.error(err);
-      alert("Import failed. Check your CSV file.");
+      alert(t("settings.importAlertFail"));
     } finally {
       setLoading(false);
     }
@@ -58,11 +60,11 @@ export default function SettingsImport() {
 
   return (
     <div className="text-gray-900 dark:text-gray-200">
-      <h1 className="text-2xl font-bold mb-6">Import Accounts</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("settings.import")}</h1>
 
       <div className="bg-white dark:bg-gray-800 shadow p-5 rounded border dark:border-gray-700">
         <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-          CSV format (no ID):
+          {t("settings.CSVformat")} (no ID):
           <br />
           <strong>title,username,password,url</strong>
         </p>
@@ -94,7 +96,7 @@ export default function SettingsImport() {
             }
           `}
         >
-          {loading ? "Importing..." : "Import CSV"}
+          {loading ? t("settings.importing") : t("settings.importCSV")}
         </button>
       </div>
     </div>

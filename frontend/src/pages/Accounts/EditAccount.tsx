@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useItems } from "../../hooks/useItems";
+import { useI18n } from "../../i18n/useI18n";
 
 export default function EditAccount() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { getItemById, updateItem } = useItems();
+  const { t } = useI18n();
   const [showPassword, setShowPassword] = useState(false);
 
   const [form, setForm] = useState({
@@ -36,7 +38,7 @@ export default function EditAccount() {
 
   return (
     <div className="max-w-lg mx-auto mt-8 bg-white p-6 shadow rounded">
-      <h2 className="text-xl font-bold mb-4">Edit Account</h2>
+      <h2 className="text-xl font-bold mb-4">{t("dashboard.editAccount")}</h2>
 
       <div className="space-y-3">
         <input

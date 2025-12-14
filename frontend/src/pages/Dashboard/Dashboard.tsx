@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import ItemCard from "../../components/ItemCard";
 import api from "../../api/client";
 import { Input } from "../../components/ui/Input";
+import { useI18n } from "../../i18n/useI18n";
 
 export default function Dashboard() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+
+  const { t } = useI18n();
 
   const load = async () => {
     try {
@@ -59,11 +62,11 @@ export default function Dashboard() {
 
   return (
     <div className="text-gray-900">
-      <h1 className="text-2xl font-bold mb-4">Your saved accounts</h1>
+      <h1 className="text-2xl font-bold mb-4"> {t("dashboard.yourAccounts")} </h1>
 
       {/* 🔍 Search bar */}
       <Input
-        placeholder="Search by title or username..."
+        placeholder={t("dashboard.searchPlaceholder")}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="mb-6 max-w-md"
@@ -72,7 +75,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {filteredItems.length === 0 && (
           <p className="text-gray-500 dark:text-gray-400 col-span-3">
-            No matching accounts.
+            {t("dashboard.NoAccounts")}
           </p>
         )}
 

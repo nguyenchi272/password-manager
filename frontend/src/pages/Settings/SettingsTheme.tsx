@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { applyTheme } from "../../utils/theme";
+import { useI18n } from "../../i18n/useI18n";
 
 export default function SettingsTheme() {
   const [theme, setTheme] = useState("light");
+  const { t } = useI18n();
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("app_settings") || "{}");
@@ -21,7 +23,7 @@ export default function SettingsTheme() {
 
   return (
     <div className="text-gray-800 dark:text-gray-200">
-      <h1 className="text-2xl font-bold mb-6">Theme</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("settings.theme")}</h1>
 
       <div className="flex gap-4">
         <button
@@ -30,7 +32,7 @@ export default function SettingsTheme() {
           `}
           onClick={() => save("light")}
         >
-          Light
+          {t("settings.themeLight")}
         </button>
 
         <button
@@ -39,7 +41,7 @@ export default function SettingsTheme() {
           `}
           onClick={() => save("dark")}
         >
-          Dark
+          {t("settings.themeDark")}
         </button>
       </div>
     </div>
