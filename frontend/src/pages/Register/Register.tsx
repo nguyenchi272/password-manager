@@ -18,7 +18,10 @@ export default function Register() {
     if (password !== confirm) return alert("Passwords not match!");
 
     const ok = await register(email, password);
-    if (ok) navigate("/dashboard");
+    if (ok) {
+      alert("Register success! Please check your email to verify.");
+      navigate("/login");
+    }
     else alert("Register failed");
   };
 

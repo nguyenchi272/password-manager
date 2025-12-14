@@ -7,6 +7,7 @@ import Layout from "../components/layout/index";
 import AddAccount from "../pages/Accounts/AddAccount";
 import EditAccount from "../pages/Accounts/EditAccount";
 import Settings from "../pages/Settings/Settings";
+import VerifyEmail from "../pages/VerifyEmail/VerifyEmail";
 
 export const AppRoutes = () => {
   const routes = useRoutes([
@@ -14,6 +15,7 @@ export const AppRoutes = () => {
     { path: "/", element: <Navigate to="/login" replace /> },
     { path: "/login", element: <Login /> },
     { path: "/register", element: <Register /> },
+    { path: "/verify-email", element: <VerifyEmail /> },
 
     // PRIVATE ROUTES
     {

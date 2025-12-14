@@ -8,12 +8,18 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  name     String?
-  email    String    @unique
-  password String
-  accounts Account[]
+  id              Int       @id @default(autoincrement())
+  name            String?
+  email           String    @unique
+  password        String
+
+  emailVerified   Boolean   @default(false)
+  verifyToken     String?
+  verifyTokenExp  DateTime?
+
+  accounts        Account[]
 }
+
 
 model Account {
   id       Int     @id @default(autoincrement())

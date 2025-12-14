@@ -47,16 +47,22 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   register: async (email, password) => {
-    set({ loading: true });
     try {
-      const res = await AuthApi.register({ email, password });
-      set({ user: res.data.user, token: res.data.token, loading: false });
-      return true;
-    } catch (e) {
+      set({ loading: true, error: null });
+
+      await AuthApi.register({ email, password });
+
       set({ loading: false });
+      return true;
+    } catch (err: any) {
+      set({
+        loading: false,
+        error: err.response?.data?.message || "Register failed",
+      });
       return false;
     }
   },
+
 
   logout: () => {
     localStorage.removeItem("token");
